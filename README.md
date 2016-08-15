@@ -1,4 +1,4 @@
-# Weebly Cloud Client: Python
+# Weebly Cloud Client: Ruby
 
 ## Installation
 To install the Weebly cloud client run:
