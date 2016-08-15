@@ -11,12 +11,13 @@ module Weeblycloud
 	class Account < CloudResource
 		include Saveable
 
-		def initialize()
+		def initialize
 			@endpoint = "account"
 			super()
 		end
 
-		def get()
+		# Make an API call to get the resource
+		def get
 			response = @client.get(@endpoint)
 			@properties = response.json["account"]
 		end
@@ -36,9 +37,9 @@ module Weeblycloud
 		end
 
 		# Returns a iterable of all Plan resources.
-		def list_plans()
+		def list_plans
 			result = @client.get("plan")
-			return result.map {|plan| Plan.new(plan["plan_id"])}
+			return result.map { |plan| Plan.new(plan["plan_id"]) }
 		end
 
 		# Return the Plan with the given ID.

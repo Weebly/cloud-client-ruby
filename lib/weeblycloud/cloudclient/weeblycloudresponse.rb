@@ -6,6 +6,7 @@ module Weeblycloud
 
 	class WeeblyCloudResponse
 		include Enumerable
+		attr_reader :json, :page_size, :max_page, :current_page, :records, :list
 
 		def initialize(response, endpoint, headers, content, params)
 			@page_size = nil
@@ -22,25 +23,26 @@ module Weeblycloud
 			@headers = headers
 			@first_iter = true
 
-
-
 			refresh()
 		end
-		attr_reader :json, :page_size, :max_page, :current_page, :records, :is_paginated, :list
 
+		# Returns whether the results are paginated
+		def paginated?
+			@is_paginated
+		end
 
 		# Get the next page, return True on success, False on failure. If the WeeblyCloudResponse is
 		# not paginated, raise an exception.
 		def next_page()
 			if not @is_paginated
-				raise PaginationError.new("Not paginated")
+				raise PaginationError, "Not paginated"
 			end
 
 			if @current_page >= @max_page
 				return False
 			end
 
-			next_page = (@params["page"] == nil) ? 2 : @params["page"] + 1
+			next_page = @params["page"].nil? ? 2 : @params["page"] + 1
 
 			@params.merge!({"page"=>next_page})
 			@response = HTTP.headers(@headers).get(@endpoint, :body => "{}", :params => @params)
@@ -51,31 +53,30 @@ module Weeblycloud
 		def each(&block)
 			# If it isn't paginated just do it once
 			if !@is_paginated
-				@list.each{|item|
-					yield(item)
-				}
+				@list.each{ |item| yield(item) }
 			else
 				# Otherwise loop over all pages
 				while @current_page < @max_page
-					@list.each{|item|
-						yield(item)
-					}
-					if @first_iter == true
+					@list.each{|item| yield(item) }
+
+					if @first_iter
 						@first_iter = false
 					else
 						next_page()
 					end
+
 				end
 			end
 		end
 
 		# Returns the current page as a JSON string
 		def to_s()
-			return @json.to_json
+			@json.to_json
 		end
 
+		# Returns the current page as a hash
 		def to_hash()
-			return @json
+			@json
 		end
 
 		private
@@ -85,17 +86,15 @@ module Weeblycloud
 			@status_code = @response.code
 
 			# Handle errors. Sometimes there may not be a response body (which is why ValueError)
-			# must be caught.
+			#   must be caught.
 			begin
-				if !([200,204].include? @status_code) or @response.parse().include? "error"
+				if !([200,204].include? @status_code) || @response.parse().include?("error")
 					error = @response.parse()
 					raise ResponseError.new(error["error"]["message"], error["error"]["code"])
 				end
 			rescue NoMethodError, HTTP::Error
 				# Sometimes DELETE returns nothing. When this is the case, it will have a status code 204
-				if @status_code != 204
-					raise ResponseError.new(code=@status_code)
-				end
+				raise ResponseError.new(code=@status_code) unless @status_code == 204
 			end
 
 			# Get information on paging if response is paginated
@@ -135,7 +134,7 @@ module Weeblycloud
 				if @status_code == 204
 					@json = {"success" => true}
 				else
-					raise ResponseError.new(code=@status_code)
+					raise ResponseError.new(code = @status_code)
 				end
 			end
 		end

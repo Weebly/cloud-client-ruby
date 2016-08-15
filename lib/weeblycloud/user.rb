@@ -6,35 +6,37 @@ require "weeblycloud/theme"
 
 module Weeblycloud
 
+	# Represents a User resource.
+	# https://cloud-developer.weebly.com/user.html
 	class User < CloudResource
 		include Saveable
 
-		def initialize(user_id, data=nil)
+		def initialize(user_id, data = nil)
 			@user_id = user_id.to_i
 			@endpoint = "user/#{@user_id}"
 			super(data)
 		end
 
-		def id()
+		def id
 			@user_id
 		end
 
-		def get()
+		def get
 			response = @client.get(@endpoint)
 			@properties = response.json["user"]
 		end
 
-		def enable()
+		def enable
 			result = @client.post(@endpoint + "/enable")
 			return result.json["success"]
 		end
 
-		def disable()
+		def disable
 			result = @client.post(@endpoint + "/disable")
 			return result.json["success"]
 		end
 
-		def login_link()
+		def login_link
 			result = @client.post(@endpoint + "/loginLink")
 			return result.json["link"]
 		end

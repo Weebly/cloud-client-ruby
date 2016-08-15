@@ -6,11 +6,13 @@ require "weeblycloud/blogpost"
 
 module Weeblycloud
 
+	# Represents an Blog resource.
+	# https://cloud-developer.weebly.com/blog.html
 	class Blog < CloudResource
 		include Saveable
 		include Deleteable
 
-		def initialize(user_id, site_id, blog_id, data=nil)
+		def initialize(user_id, site_id, blog_id, data = nil)
 			@user_id = user_id.to_i
 			@site_id = site_id.to_i
 			@blog_id = blog_id.to_i
@@ -20,7 +22,7 @@ module Weeblycloud
 		end
 
 		# Returns the blog_id
-		def id()
+		def id
 			@blog_id
 		end
 
@@ -28,7 +30,7 @@ module Weeblycloud
 		# an optional hash of argument filters.
 		def list_blog_posts(filters={})
 			result = @client.get(@endpoint + "/post", :params=>filters)
-			return result.map {|i| BlogPost.new(@user_id, @site_id, @blog_id, i["post_id"], i)}
+			return result.map { |i| BlogPost.new(@user_id, @site_id, @blog_id, i["post_id"], i) }
 		end
 
 		# Creates a `BlogPost`. Requires the post's **body** and optionally

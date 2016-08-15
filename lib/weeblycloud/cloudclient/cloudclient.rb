@@ -9,16 +9,17 @@ module Weeblycloud
 		@@api_key = nil
 		@@api_secret = nil
 
-		def initialize(api_key=nil, api_secret=nil)
+		def initialize(api_key = nil, api_secret = nil)
 			if api_key || api_secret
 				self.configure(api_key, api_secret)
-			elsif @@api_key == nil || @@api_secret == nil
+			elsif @@api_key.nil? || @@api_secret.nil?
 				raise "No API keys provided."
 			end
 
 			@BASE_API = "https://api.weeblycloud.com/"
 		end
 
+		# Globally configure API key and secret
 		def self.configure(api_key, api_secret)
 			@@api_key = api_key
 			@@api_secret = api_secret
@@ -34,11 +35,11 @@ module Weeblycloud
 			}
 			ops.merge!(options)
 			if ops[:page_size]
-				ops[:params].merge!( { "page_size" => ops[:page_size]} )
+				ops[:params].merge!({"page_size" => ops[:page_size]})
 			end
 
 			if ops[:page]
-				ops[:params].merge!( {"page" => options[:page]} )
+				ops[:params].merge!({"page" => options[:page]})
 			end
 
 			return call("GET", endpoint, ops[:content], ops[:params])
@@ -46,7 +47,7 @@ module Weeblycloud
 
 		# Make a POST request
 		def post(endpoint, options={})
-			ops = { :params => {}, :content => {} }
+			ops = {:params => {}, :content => {}}
 			ops.merge!(options)
 
 			return call("POST", endpoint, ops[:content], ops[:params])
@@ -54,7 +55,7 @@ module Weeblycloud
 
 		# Make a PATCH request
 		def patch(endpoint, options={})
-			ops = { :params => {}, :content => {} }
+			ops = {:params => {}, :content => {}}
 			ops.merge!(options)
 
 			return call("PATCH", endpoint, ops[:content], ops[:params])
@@ -62,7 +63,7 @@ module Weeblycloud
 
 		# Make a PUT request
 		def put(endpoint, options={})
-			ops = { :params => {}, :content => {} }
+			ops = {:params => {}, :content => {}}
 			ops.merge!(options)
 
 			return call("PUT", endpoint, ops[:content], ops[:params])
@@ -70,7 +71,7 @@ module Weeblycloud
 
 		# Make a DELETE request
 		def delete(endpoint, options={})
-			ops = { :params => {}, :content => {} }
+			ops = {:params => {}, :content => {}}
 			ops.merge!(options)
 
 			return call("DELETE", endpoint, ops[:content], ops[:params])

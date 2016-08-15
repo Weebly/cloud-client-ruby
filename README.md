@@ -151,9 +151,7 @@ puts site.login_link()
 ```ruby
 pages = site.list_pages("query" => "help")
 
-pages.each {|i| do
-	puts page.get_property("title")
-}
+pages.each { |i| puts page.get_property("title") }
 ```
 
 ## Making Raw API Calls
@@ -215,7 +213,7 @@ puts response.to_s # get the response as a JSON string
 puts response.to_hash # get the response as a hash
 ```
 
-If the results of a get request are paginated, then `response.is_paginated` will be `true`.
+If the results of a get request are paginated, then `response.paginated?` will be `true`.
 
 - `response.max_page` contains the total number of pages.
 - `response.current_page` contains the current page number.
@@ -227,7 +225,7 @@ client = weeblycloud::WeeblyCloud.new
 response = client.get("user/#{USER_ID}/site")
 
 # Print a list of site titles
-puts response.map {|site| site['site_title']}
+puts response.map { |site| site['site_title'] }
 
 ```
 

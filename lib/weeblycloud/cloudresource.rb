@@ -1,27 +1,32 @@
 require 'weeblycloud/cloudclient/cloudclient'
+require 'json'
 
 module Weeblycloud
-	class CloudResource
 
-		def initialize(data=nil)
-			@client = CloudClient.new()
+	# A base resource that all other resources inherit from.
+	class CloudResource
+		attr_reader :properties
+
+		def initialize(data = nil)
+			@client = CloudClient.new
 			@properties = {}
 			@changed = {}
 
-			if !data
-				get()
+			# If data isn't provided, make an API call to get it
+			if data
+				@properties = data
 				@got = true
 			else
-				@properties = data
+				get()
 				@got = true
 			end
 		end
-		attr_reader :properties
 
+		# Get a property. Returns nil if the property does not exist.
 		def get_property(prop)
-			if @properties.key?(prop)
-				return @properties[prop]
-			else
+			begin
+				return @properties.fetch(prop)
+			raise KeyError
 				if !@got
 					get()
 					@got = true
@@ -32,15 +37,23 @@ module Weeblycloud
 			end
 		end
 
-		def to_s()
-			return @properties.to_s
+		# Get a property. Returns nil if the property does not exist.
+		def [](prop)
+			get_property(prop)
 		end
 
-		def id()
+		# Returns the properties as a json string
+		def to_s
+			@properties.to_json
+		end
+
+		# Returns the ID for the resource object
+		def id
 			raise "Method not implemented."
 		end
 
-		def get()
+		# Gets the resources with an API call
+		def get
 			@response = @client.get(@endpoint)
 			@properties = @response.json
 		end
