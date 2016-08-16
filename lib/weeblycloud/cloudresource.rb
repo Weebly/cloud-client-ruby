@@ -27,12 +27,12 @@ module Weeblycloud
       begin
         return @properties.fetch(prop)
       raise KeyError
-        if !@got
+        if @got
+          return nil
+        else
           get()
           @got = true
           return get_property(prop)
-        else
-          return nil
         end
       end
     end

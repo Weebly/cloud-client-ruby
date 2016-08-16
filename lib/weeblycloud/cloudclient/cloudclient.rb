@@ -84,7 +84,7 @@ module Weeblycloud
       json_data = content.to_json
       strip_slashes(endpoint)
       headers = {
-        "Content-type" => "application/json",
+        "Content-Type" => "application/json",
         "X-Public-Key" => @@api_key,
         "X-Signed-Request-Hash" => sign(method, endpoint, json_data)
       }

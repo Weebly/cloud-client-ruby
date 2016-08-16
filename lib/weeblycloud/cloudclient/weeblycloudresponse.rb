@@ -51,21 +51,19 @@ module Weeblycloud
 
     # Iterate over all pages. Accepts a block.
     def each(&block)
-      # If it isn't paginated just do it once
-      if !@is_paginated
-        @list.each{ |item| yield(item) }
-      else
-        # Otherwise loop over all pages
+      if @is_paginated
+        # loop over all pages
         while @current_page < @max_page
           @list.each{|item| yield(item) }
-
           if @first_iter
             @first_iter = false
           else
             next_page()
           end
-
         end
+      else
+        # If it isn't paginated just do it once
+        @list.each{ |item| yield(item) }
       end
     end
 
