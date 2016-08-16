@@ -29,13 +29,13 @@ Requests that take serveral optional parameters (i.e. filters or object properti
 
 For instance, to sort all pages by title:
 
-```python
+```ruby
 site.list_pages("filterby" => "title", "fitlerfor" => "menu")
 ```
 
 And to create a new site:
 
-```python
+```ruby
 user.create_site("example.com", 4, "brand_name" => "Brand Name")
 ```
 
