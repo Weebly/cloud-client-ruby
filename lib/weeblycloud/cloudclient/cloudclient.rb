@@ -85,6 +85,8 @@ module Weeblycloud
       strip_slashes(endpoint)
       headers = {
         "Content-Type" => "application/json",
+        "W-Cloud-Client-Type" => "ruby",
+        "W-Cloud-Client-Version" => VERSION,
         "X-Public-Key" => @@api_key,
         "X-Signed-Request-Hash" => sign(method, endpoint, json_data)
       }
