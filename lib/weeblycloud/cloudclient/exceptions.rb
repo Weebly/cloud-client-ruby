@@ -6,8 +6,8 @@ module Weeblycloud
 
     def initialize(msg = "Unknown error occured", code)
       @code = code
-    @message = msg
-    m = "(CODE: \##{@code}) #{@msg}"
+      @message = msg
+      m = "(CODE: \##{@code}) #{@msg}"
       super(m)
     end
   end
