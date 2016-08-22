@@ -5,7 +5,7 @@ To install the Weebly cloud client run:
 
 	$ gem install weeblycloud
 
-## Getting Started
+## Setup and Authentication
 To use the Weebly Cloud client libraries require `weeblycloud` and configure your API keys.
 
 ```ruby
@@ -15,6 +15,43 @@ Weeblycloud::CloudClient::configure(API_KEY, API_SECRET)
 ```
 
 All future calls will use that API key and secret pairing.
+
+## Examples
+
+### Creating a user and site, get a login link
+
+```ruby
+account = Weeblycloud::Account.new
+user = account.create_user("test@email.com")
+site = user.create_site("domain.com", "site_title" => "My Website")
+puts site.login_link()
+```
+
+### Printing the name of all pages in a site matching the query "help"
+
+```ruby
+pages = site.list_pages("query" => "help")
+
+pages.each { |page| puts page.get_property("title") }
+```
+
+## Error Handling
+If a request is unsuccessful, a `ResponseError` exception is raised. This can be caught as follows:
+
+```ruby
+begin
+	account = Weeblycloud::Account.new
+	user = account.create_user("test@email.com")
+	site = user.create_site("domain.com", "site_title" => "My Website")
+	puts site.login_link()
+rescue Weeblycloud::ResponseError => err
+	puts err.code # Prints the error code
+	puts err.message # Prints the error message
+end
+```
+
+If a pagination method is called on a `WeeblyCloudResponse` that isn't paginated, a `PaginationError` exception is raised.
+
 
 ## Resources
 
@@ -39,6 +76,7 @@ And to create a new site:
 user.create_site("example.com", 4, "brand_name" => "Brand Name")
 ```
 
+## Resource Types
 ### Account
 [API Documentation](https://cloud-developer.weebly.com/account.html)
 
@@ -135,25 +173,6 @@ user.create_site("example.com", 4, "brand_name" => "Brand Name")
 
 - **`delete()`** Delete the Member.
 
-### Examples
-
-#### Creating a user and site, get a login link
-
-```ruby
-account = Weeblycloud::Account.new
-user = account.create_user("test@email.com")
-site = user.create_site("domain.com", "site_title" => "My Website")
-puts site.login_link()
-```
-
-#### Printing the name of all pages in a site matching the query "help"
-
-```ruby
-pages = site.list_pages("query" => "help")
-
-pages.each { |i| puts page.get_property("title") }
-```
-
 ## Making Raw API Calls
 Not every resource has a cooresponding resource class. It is possible to make a raw API call using a `CloudClient` object.
 
@@ -228,24 +247,3 @@ response = client.get("user/#{USER_ID}/site")
 puts response.map { |site| site['site_title'] }
 
 ```
-
-## Error Handling
-If a request is unsuccessful, a `ResponseError` exception is raised. This can be caught as follows:
-
-```ruby
-begin
-	account = Weeblycloud::Account.new
-	user = account.create_user("test@email.com")
-	site = user.create_site("domain.com", "site_title" => "My Website")
-	puts site.login_link()
-rescue Weeblycloud::ResponseError => err
-	puts err.code # Prints the error code
-	puts err.message # Prints the error message
-end
-```
-
-If a pagination method is called on a `WeeblyCloudResponse` that isn't paginated, a `PaginationError` exception is raised.
-
-##Questions?
-
-If you have any questions or feature requests pertaining to the Weebly Cloud Client, please open up a new issue. For general API questions, please contact us at [dev-support@weebly.com](dev-support@weebly.com), and we'll be happy to lend a hand!
