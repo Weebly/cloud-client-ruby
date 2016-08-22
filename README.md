@@ -21,18 +21,25 @@ All future calls will use that API key and secret pairing.
 ### Creating a user and site, get a login link
 
 ```ruby
-account = Weeblycloud::Account.new
-user = account.create_user("test@email.com")
-site = user.create_site("domain.com", "site_title" => "My Website")
-puts site.login_link()
+begin
+	account = Weeblycloud::Account.new
+	user = account.create_user("test@email.com")
+	site = user.create_site("domain.com", "site_title" => "My Website")
+	puts site.login_link()
+rescue Weeblycloud::ResponseError => err
+	puts "Error: " + err.message
+end
 ```
 
 ### Printing the name of all pages in a site matching the query "help"
 
 ```ruby
-pages = site.list_pages("query" => "help")
-
-pages.each { |page| puts page.get_property("title") }
+begin
+	pages = site.list_pages("query" => "help")
+	pages.each { |page| puts page.get_property("title") }
+rescue Weeblycloud::ResponseError => err
+	puts "Error: " + err.message
+end
 ```
 
 ## Error Handling
