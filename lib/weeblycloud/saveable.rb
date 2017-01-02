@@ -9,14 +9,12 @@ module Weeblycloud
         @properties[prop] = value
         @changed[prop] = value
         return true
+      elsif @got
+        return nil
       else
-        if @got
-          return nil
-        else
-          get()
-          @got = true
-          return set_property(prop, value)
-        end
+        get()
+        @got = true
+        return set_property(prop, value)
       end
     end
 
@@ -31,6 +29,7 @@ module Weeblycloud
       @changed = {}
       return nil
     end
+    alias save! save
 
   end
 
