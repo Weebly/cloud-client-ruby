@@ -13,21 +13,22 @@ module Weeblycloud
         if @got
           return nil
         else
-          @got = true
           get()
+          @got = true
           return set_property(prop, value)
         end
       end
     end
 
     # Set a property using the [] setter
-    def []=(prop)
-      set_property(prop)
+    def []=(prop, value)
+      set_property(prop, value)
     end
 
     # Make an API call to save changes to the resource
     def save
       @client.patch(@endpoint, :content=>@changed)
+      @changed = {}
       return nil
     end
 
