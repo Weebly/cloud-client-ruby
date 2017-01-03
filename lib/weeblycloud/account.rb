@@ -11,9 +11,9 @@ module Weeblycloud
   class Account < CloudResource
     include Saveable
 
-    def initialize
+    def initialize(data = nil)
       @endpoint = "account"
-      super()
+      super(data)
     end
 
     # Make an API call to get the resource
