@@ -102,7 +102,7 @@ user.create_site("example.com", 4, "brand_name" => "Brand Name")
 - **`list_sites(filters={})`** Returns a list of `Site` resources for a given user subject to filters.
 - **`get_site(site_id)`** Return the `Site` with the given ID.
 - **`create_theme(name, zip_url)`** Creates a `Theme` with name **name**. Requires a **zip_url** and returns a `Theme` object.
-- **`create_site(domain)`** Creates a `Site`. Requires the site's **domain** and optionally accepts keyword arguments of additional properties. Returns a `User` resource.
+- **`create_site(domain)`** Creates a `Site`. Requires the site's **domain** and optionally accepts keyword arguments of additional properties. Returns a `Site` resource.
 
 ### Site
 [API Documentation](https://cloud-developer.weebly.com/site.html)

@@ -1,4 +1,4 @@
-require "HTTP"
+require "http"
 require "json"
 require "weeblycloud/cloudclient/exceptions"
 
